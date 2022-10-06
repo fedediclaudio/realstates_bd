@@ -1,0 +1,13 @@
+com/dbd/realstate/controllers/RealStatesController.class
+com/dbd/realstate/services/RealStatesServiceImpl.class
+com/dbd/realstate/repositories/RealStateRepository.class
+com/dbd/realstate/model/Employee.class
+com/dbd/realstate/model/PhysicalPerson.class
+com/dbd/realstate/model/Property.class
+com/dbd/realstate/config/HibernateConfiguration.class
+com/dbd/realstate/RealstateTestApplication.class
+com/dbd/realstate/model/Owner.class
+com/dbd/realstate/model/RealState.class
+com/dbd/realstate/RealStateExcepction.class
+com/dbd/realstate/services/RealStatesService.class
+com/dbd/realstate/model/LegalPerson.class
