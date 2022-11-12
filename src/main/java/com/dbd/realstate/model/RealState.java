@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "real_state")
-public class RealState {
+public class RealState implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,6 +39,10 @@ public class RealState {
     @OneToMany(mappedBy = "realState", fetch = FetchType.LAZY, cascade = {}, orphanRemoval = false)
     @JsonIgnore
     private List<Employee> employees;
+
+    @Version
+    @Column(name = "version")
+    private int version;
 
     public RealState() {}
 
@@ -125,4 +130,8 @@ public class RealState {
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
     }
+
+    public void setVersion(int version) { this.version = version;}
+
+    public int getVersion() { return this.version;}
 }

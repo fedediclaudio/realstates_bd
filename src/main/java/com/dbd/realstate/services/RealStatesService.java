@@ -12,7 +12,7 @@ public interface RealStatesService {
 
     public RealState getRealState(Long id) throws RealStateExcepction;
 
-    public RealState updateRealState(RealState realState,Long id) throws RealStateExcepction;
+    public RealState updateRealState(RealState realState) throws RealStateExcepction;
 
     public Employee createEmployee(Employee employee) throws RealStateExcepction;
 

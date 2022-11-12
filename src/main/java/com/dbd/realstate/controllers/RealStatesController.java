@@ -62,9 +62,9 @@ public class RealStatesController {
         "numberOfEmployees": 0,
     }
      */
-    @PutMapping(path = "/realstate/{id}")
-    public RealState updateRealState(@RequestBody RealState realState, @PathVariable Long id) throws RealStateExcepction{
-        return this.service.updateRealState(realState,id);
+    @PutMapping(path = "/realstate")
+    public RealState updateRealState(@RequestBody RealState realState) throws RealStateExcepction{
+        return this.service.updateRealState(realState);
     }
      /*
      POST /employee
@@ -106,8 +106,8 @@ public class RealStatesController {
     }
 
     @GetMapping(path = "/employee/calification/{number}")
-    public List<Employee> getEmployeesWithCalificationGreatherThan(@PathVariable int calification) throws RealStateExcepction {
-        return this.service.employeesWithCalificationGreatherThan(calification);
+    public List<Employee> getEmployeesWithCalificationGreatherThan(@PathVariable String number) throws RealStateExcepction {
+        return this.service.employeesWithCalificationGreatherThan(Float.parseFloat(number));
     }
 
 
