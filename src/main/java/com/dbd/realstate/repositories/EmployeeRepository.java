@@ -2,14 +2,16 @@ package com.dbd.realstate.repositories;
 
 import com.dbd.realstate.model.Employee;
 import com.dbd.realstate.model.RealState;
-import org.springframework.data.jpa.repository.Query;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-public interface EmployeeRepository extends CrudRepository<Employee, Long> {
+public interface EmployeeRepository extends MongoRepository<Employee, ObjectId> {
 
     Optional<Employee> findByDni(String dni);
 
@@ -29,9 +31,6 @@ public interface EmployeeRepository extends CrudRepository<Employee, Long> {
 
     List<Employee> findByRealState_name(String name);
 
-    @Query(value = "from Employee where dni = ?1") //HQL
+    @Query(value = "")
     Optional<Employee> customFindByDni(String dni);
-
-    @Query(value = "select * from employee where dni = ?1", nativeQuery = true) //SQL
-    Optional<Employee> custom2FindByDni(String dni);
 }

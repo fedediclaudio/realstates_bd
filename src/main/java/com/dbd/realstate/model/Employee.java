@@ -1,31 +1,35 @@
 package com.dbd.realstate.model;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.*;
+
 import java.util.Date;
 
-@Entity
-@Table(name = "employee")
+@Document
 public class Employee {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_employee")
-    private Long id;
+    @MongoId
+    @JsonSerialize(using= ToStringSerializer.class) //Para mostrar en forma de String en la respuesta HTTP
+    private ObjectId id;
 
-    @Column(name = "full_name", nullable = false, length = 100)
+    @Field(name = "fullname") //Revisar todas las propiedades
     private String fullname;
 
-    @Column(unique = true, nullable = false, updatable = false, length = 8)
+    @Field
     private String dni;
 
-    @Column()
+    @Field
     private float calification;
 
-    @Column(updatable = false, name = "date_of_admission", nullable = true)
+    @Field
     private Date dateOfAdmission;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JoinColumn(name = "id_real_state", nullable = false)
+    @Field // DBRef para mantener la referencia
+    @JsonBackReference
     private RealState realState;
 
     public Employee(String fullname, String dni, float calification, Date dateOfAdmission, RealState realState) {
@@ -38,11 +42,11 @@ public class Employee {
 
     public Employee() {}
 
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

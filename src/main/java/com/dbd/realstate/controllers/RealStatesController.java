@@ -4,6 +4,7 @@ import com.dbd.realstate.RealStateExcepction;
 import com.dbd.realstate.model.Employee;
 import com.dbd.realstate.model.RealState;
 import com.dbd.realstate.services.RealStatesService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class RealStatesController {
     Obtiene los datos de la Real State con id indicado en la URL
      */
     @GetMapping(path = "/realstate/{id}")
-    public RealState getRealState(@PathVariable Long id) throws RealStateExcepction {
+    public RealState getRealState(@PathVariable ObjectId id) throws RealStateExcepction {
         return this.service.getRealState(id);
     }
 
@@ -101,7 +102,7 @@ public class RealStatesController {
     }
 
     @DeleteMapping(path = "/employee/{id}")
-    public boolean deleteEmployee(@PathVariable Long id) throws RealStateExcepction {
+    public boolean deleteEmployee(@PathVariable ObjectId id) throws RealStateExcepction {
         return this.service.deleteEmployee(id);
     }
 

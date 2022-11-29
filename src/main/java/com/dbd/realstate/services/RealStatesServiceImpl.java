@@ -5,6 +5,7 @@ import com.dbd.realstate.model.Employee;
 import com.dbd.realstate.model.RealState;
 import com.dbd.realstate.repositories.EmployeeRepository;
 import com.dbd.realstate.repositories.RealStateRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ public class RealStatesServiceImpl implements RealStatesService{
     }
 
     @Override
-    public RealState getRealState(Long id) throws RealStateExcepction {
+    public RealState getRealState(ObjectId id) throws RealStateExcepction {
         Optional<RealState> realState = this.realStateRepository.findById(id);
         return realState.orElse(null);
     }
@@ -43,7 +44,10 @@ public class RealStatesServiceImpl implements RealStatesService{
     @Override
     @Transactional
     public Employee createEmployee(Employee employee) throws RealStateExcepction {
-        return this.employeeRepository.save(employee);
+        Employee e =  this.employeeRepository.save(employee);
+        e.getRealState().getEmployees().add(e);
+        this.realStateRepository.save(e.getRealState());
+        return e;
     }
 
     @Override
@@ -55,7 +59,7 @@ public class RealStatesServiceImpl implements RealStatesService{
 
     @Override
     @Transactional
-    public boolean deleteEmployee(Long id) throws RealStateExcepction {
+    public boolean deleteEmployee(ObjectId id) throws RealStateExcepction {
         Optional<Employee> employee = this.employeeRepository.findById(id);
         if(employee.isPresent()) {
             this.employeeRepository.delete(employee.get());

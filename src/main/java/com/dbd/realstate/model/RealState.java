@@ -1,47 +1,52 @@
 package com.dbd.realstate.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "real_state")
-public class RealState implements Serializable {
+@Document
+public class RealState {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_real_state")
-    private Long id;
+    @MongoId
+    @JsonSerialize(using= ToStringSerializer.class)
+    private ObjectId id;
 
-    @Column(name="name", insertable = true, length = 50, nullable = false,
-            table = "real_state", updatable = true, unique = false)
+    @Field
     private String name;
 
-    @Column(nullable = false, unique = true, updatable = false)
+    @Field
     private String cuil;
 
-    @Column(length = 20)
+    @Field
     private String number;
 
-    @Column(length = 100)
+    @Field
     private String address;
 
-    @Column(name = "number_of_employees")
+    @Field
     private int numberOfEmployees;
 
-    @Transient // Evitamos que se mapee ya que no estamos trabajando esta relacion.
+    @DBRef // Field para embeber
+    @JsonManagedReference
+    private List<Employee> employees = new ArrayList<Employee>();
+
+    @BsonIgnore // Ignora esta propiedad, ya que no estan mapeadas las Propiedades en esta muesta
     private List<Property> propertyList;
 
-    @OneToMany(mappedBy = "realState", fetch = FetchType.LAZY, cascade = {}, orphanRemoval = false)
-    @JsonIgnore
-    private List<Employee> employees;
-
     @Version
-    @Column(name = "version")
     private int version;
 
     public RealState() {}
@@ -52,26 +57,24 @@ public class RealState implements Serializable {
         this.number = number;
         this.address = address;
         this.numberOfEmployees = numberOfEmployees;
-        this.employees = new ArrayList<Employee>();
         this.propertyList = new ArrayList<Property>();
     }
 
-    public RealState(Long id, String name, String cuil, String number, String address, int numberOfEmployees) {
+    public RealState(ObjectId id, String name, String cuil, String number, String address, int numberOfEmployees) {
         this.id = id;
         this.name = name;
         this.cuil = cuil;
         this.number = number;
         this.address = address;
         this.numberOfEmployees = numberOfEmployees;
-        this.employees = new ArrayList<Employee>();
         this.propertyList = new ArrayList<Property>();
     }
 
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -134,4 +137,8 @@ public class RealState implements Serializable {
     public void setVersion(int version) { this.version = version;}
 
     public int getVersion() { return this.version;}
+
+    public void addEmployee(Employee employee) {
+        this.employees.add(employee);
+    }
 }
